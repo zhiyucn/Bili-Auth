@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>授权请求</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F3F4F6;  /* 浅灰背景 */
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 400px;
+            margin: 100px auto;  /* 垂直和水平居中 */
+            background: #FFFFFF;  /* 白色背景 */
+            padding: 20px;
+            border-radius: 12px;  /* 圆角 */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);  /* 阴影 */
+            text-align: center;  /* 文本居中 */
+        }
+
+        h1 {
+            color: #333333;  /* 标题颜色 */
+            margin-bottom: 20px;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        button {
+            background-color: #0078D4;  /* 按钮颜色 */
+            color: white;  /* 按钮文字颜色 */
+            padding: 10px 15px;  /* 内边距 */
+            border: none;  /* 无边框 */
+            border-radius: 8px;  /* 圆角 */
+            cursor: pointer;  /* 鼠标光标为手形 */
+            transition: background-color 0.3s;  /* 背景色过渡效果 */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);  /* 按钮阴影 */
+            margin: 10px 0;  /* 按钮间距 */
+        }
+
+        button:hover {
+            background-color: #005a9e;  /* 悬停时变色 */
+        }
+
+        a {
+            color: #0078D4;  /* 链接颜色 */
+            text-decoration: none;  /* 去掉下划线 */
+        }
+
+        a:hover {
+            text-decoration: underline;  /* 悬停时出现下划线 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>授权应用</h1>
+        <p>应用客户端ID: {{ client_id }}</p>
+        <p>您是否允许此应用访问您的账户？</p>
+        <form method="POST" action="/approve">
+            <input type="hidden" name="client_id" value="{{ client_id }}">
+            <input type="hidden" name="redirect_uri" value="{{ redirect_uri }}">
+            <button type="submit">允许</button>
+        </form>
+        <button onclick="window.location='{{ redirect_uri }}'">拒绝</button>
+    </div>
+</body>
+</html>

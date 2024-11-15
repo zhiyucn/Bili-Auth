@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bili-Auth 管理页面</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F3F4F6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 600px;
+            margin: 50px auto;
+            background: #FFFFFF;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        h1, h2 {
+            color: #333;
+            margin: 20px 0;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #e1e1e1;
+            text-align: left;
+        }
+
+        th {
+            background-color: #0078d4;
+            color: white;
+        }
+
+        button {
+            background-color: #0078D4;  /* Windows 11 按钮色 */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);  /* 阴影效果 */
+        }
+
+        button:hover {
+            background-color: #005a9e;  /* 悬停时按钮颜色 */
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  /* 输入框阴影 */
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  /* 下拉框阴影 */
+        }
+
+        /* 布局调整 */
+        form {
+            margin-bottom: 20px;  /* 表单间距 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bili-Auth 管理页面</h1>
+
+        <h2>修改会话密钥</h2>
+        <form method="POST" action="/manage">
+            <input type="text" name="session_key" placeholder="新的会话密钥" required>
+            <button type="submit">更新密钥</button>
+        </form>
+
+        <h2>添加机器人账号</h2>
+        <form id="addAccountForm" method="POST" action="/add-account">
+            <input type="text" name="sender_uid" placeholder="发送者UID" required>
+            <input type="text" name="cookies" placeholder="Cookie字符串" required>
+            <input type="text" name="device_id" placeholder="设备ID" required>
+            <input type="text" name="csrf" placeholder="CSRF令牌" required>
+            <button type="submit">添加账号</button>
+        </form>
+
+        <h2>测试机器人账号</h2>
+        <form method="POST" action="/test-account">
+            <select name="account_id" required>
+                <option value="">请选择要测试的机器人账号</option>
+                {% for account in accounts %}
+                <option value="{{ account[0] }}">{{ account[1] }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" name="target_uid" placeholder="目标UID" required>
+            <button type="submit">测试账号</button>
+        </form>
+
+        <h2>机器人账号列表</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>发送者UID</th>
+                    <th>Cookie</th>
+                    <th>设备ID</th>
+                    <th>CSRF</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for account in accounts %}
+                <tr>
+                    <td>{{ account[0] }}</td>
+                    <td>{{ account[1] }}</td>
+                    <td>{{ account[2] }}</td>
+                    <td>{{ account[3] }}</td>
+                    <td>{{ account[4] }}</td>
+                    <td>
+                        <form method="POST" action="/delete-account/{{ account[0] }}" style="display:inline;">
+                            <button type="submit">删除</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>添加OAuth2配置</h2>
+        <form method="POST" action="/add-oauth-config">
+            <input type="text" name="redirect_uri" placeholder="Redirect URI" required>
+            <input type="text" name="authorization_url" placeholder="授权URL" required>
+            <input type="text" name="token_url" placeholder="Token URL" required>
+            <button type="submit">添加配置</button>
+        </form>
+
+        <h2>OAuth2配置列表</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Client ID</th>
+                    <th>Client Secret</th>
+                    <th>Redirect URI</th>
+                    <th>授权URL</th>
+                    <th>Token URL</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for config in oauth_configs %}
+                <tr>
+                    <td>{{ config[0] }}</td>
+                    <td>{{ config[1] }}</td>
+                    <td>{{ config[2] }}</td>
+                    <td>{{ config[3] }}</td>
+                    <td>{{ config[4] }}</td>
+                    <td>{{ config[5] }}</td>
+                    <td>
+                        <form method="POST" action="/delete-oauth-config/{{ config[0] }}" style="display:inline;">
+                            <button type="submit">删除</button>
+                        </form>
+                        <a href="/login-oauth/{{ config[0] }}">
+                            <button>登录</button>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
