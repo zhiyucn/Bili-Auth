@@ -5,8 +5,8 @@ class Auth:
     def __init__(self):
         pass
     #这里发送验证码
-    def send_code(self,sender_uid,receiver_uid,cookies,device_id,csrf):
-        vetify_code = "验证码："+str(random.randint(100000,999999))
+    def send_code(sender_uid,receiver_uid,cookies,device_id,csrf):
+        vetify_code = str(random.randint(100000,999999))
         content = f"[Bili-Auth]您的验证码为：{vetify_code}，请在10分钟内输入。"
         print(content)
         url = "https://api.vc.bilibili.com/web_im/v1/web_im/send_msg"

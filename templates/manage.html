@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f3f4f6;
+            background-color: #F3F4F6;
             margin: 0;
             padding: 0;
         }
@@ -16,15 +16,19 @@
         .container {
             width: 600px;
             margin: 50px auto;
-            background: #ffffff;
+            background: #FFFFFF;
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         }
 
+        h1, h2 {
+            color: #333;
+            margin: 20px 0;
+        }
+
         h1 {
             text-align: center;
-            color: #333;
         }
 
         table {
@@ -45,17 +49,18 @@
         }
 
         button {
-            background-color: #f25022;
+            background-color: #0078D4;  /* Windows 11 按钮色 */
             color: white;
             padding: 10px 15px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             transition: background-color 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);  /* 阴影效果 */
         }
 
         button:hover {
-            background-color: #c2411b;
+            background-color: #005a9e;  /* 悬停时按钮颜色 */
         }
 
         input[type="text"] {
@@ -64,6 +69,21 @@
             margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  /* 输入框阴影 */
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  /* 下拉框阴影 */
+        }
+
+        /* 布局调整 */
+        form {
+            margin-bottom: 20px;  /* 表单间距 */
         }
     </style>
 </head>
@@ -130,8 +150,6 @@
 
         <h2>添加OAuth2配置</h2>
         <form method="POST" action="/add-oauth-config">
-            <input type="text" name="client_id" placeholder="Client ID" required>
-            <input type="text" name="client_secret" placeholder="Client Secret" required>
             <input type="text" name="redirect_uri" placeholder="Redirect URI" required>
             <input type="text" name="authorization_url" placeholder="授权URL" required>
             <input type="text" name="token_url" placeholder="Token URL" required>
