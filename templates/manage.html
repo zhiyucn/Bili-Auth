@@ -105,7 +105,9 @@
             <input type="text" name="csrf" placeholder="CSRF令牌" required>
             <button type="submit">添加账号</button>
         </form>
-
+        <h2>添加机器人账号(模式2)(开发中)</h2>
+        <form id="addAccountForm2" method="GET" action="/get-qr-code"></form>
+        <button type="button" onclick="addAccount()">添加账号</button>
         <h2>测试机器人账号</h2>
         <form method="POST" action="/test-account">
             <select name="account_id" required>

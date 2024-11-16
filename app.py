@@ -4,7 +4,14 @@ import requests
 import auth
 import uuid
 import random
-
+import log
+import time
+import qrcode
+import json
+import os
+from io import BytesIO
+from flask import send_file
+logging = log.Log(time.strftime("%Y-%m-%d", time.localtime())+".log")
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # 初始密钥，可在管理页面修改
 
@@ -33,10 +40,11 @@ def init_db():
     ''')
     conn.commit()
     conn.close()
-
+    logging.log("DB_INIT_SUCCESS")
 @app.route('/')
 def index():
     return render_template('index.html')
+    logging.log("INDEX_PAGE_VISITED")
 
 @app.route('/manage', methods=['GET', 'POST'])
 def manage():
@@ -243,6 +251,23 @@ def test_account():
 
     return redirect(url_for('manage'))  # 处理未选择的情况
 
+@app.route('/get-qr-code')
+def get_qr_code():
+    get = requests.get('https://passport.bilibili.com/x/passport-login/web/qrcode/generate')
+    code_url = get.json()['data']['url']
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+    qr.add_data(code_url)
+    qr.make(fit=True)
+    img = qr.make_image(fill_color="black", back_color="white")
+    img_io = BytesIO()
+    img.save(img_io, 'PNG')
+    img_io.seek(0)
+    return send_file(img_io, mimetype='image/png')
 if __name__ == '__main__':
     init_db()
     app.run(port=8000)

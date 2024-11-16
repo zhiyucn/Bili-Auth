@@ -1,11 +1,16 @@
 import requests
 import random
 import time
+import log
+logging = log.Log(time.strftime("%Y-%m-%d", time.localtime())+".log")
+logging.log("AUTH RUNNING", "INFO")
+verify_code = ""
 class Auth:
     def __init__(self):
         pass
     #这里发送验证码
     def send_code(sender_uid,receiver_uid,cookies,device_id,csrf):
+        global verify_code
         vetify_code = str(random.randint(100000,999999))
         content = f"[Bili-Auth]您的验证码为：{vetify_code}，请在10分钟内输入。"
         print(content)
@@ -37,10 +42,18 @@ class Auth:
         print("状态码:", response.status_code)
         print("响应内容:", response.text)
         if response.text == '{"code":-111,"message":"csrf 校验失败","ttl":1}':
-            print("csrf 校验失败，请重新获取，否则此机器人将失效，会自动切换到其他可用机器人。")
+            logging.log("CSRF_ERROR", "WARNING")
         elif '"code":0' in response.text:
-            print("验证码发送成功！")
+            logging.log("SEND_CODE_SUCCESS:"+vetify_code, "INFO")
         elif '-101' in response.text:
-            print("发送失败，账号未登录，可能是cookie失效，请重新登录。")
+            logging.log("COOKIE_ERROR", "WARNING")
         else:
-            print("未知错误，请检查日志。")
+            logging.log("UNKNOWN_ERROR", "ERROR")
+
+    def test_code(code):
+        if len(code) == 6 and code == verify_code:
+            logging.log("TRUE")
+            return True
+        else:
+            logging.log("FALSE")
+            return False
