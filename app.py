@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, redirect, url_for, session, flash,send_from_directory, Response
+from flask import Flask, request, jsonify, render_template, redirect, url_for, session, flash, send_from_directory, Response
 import sqlite3
 import requests
 import auth
@@ -9,17 +9,16 @@ import time
 import qrcode
 import json
 import os
-import uuid
-from io import BytesIO
-from flask import send_file
-logging = log.Log(time.strftime("%Y-%m-%d", time.localtime())+".log")
-app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # 初始密钥，可在管理页面修改
 
-# 初始化SQLite数据库
+logging = log.Log(time.strftime("%Y-%m-%d", time.localtime()) + ".log")
+app = Flask(__name__)
+app.secret_key = 'dhw82h80H8dwiopusb2udqwef3123'  # 初始密钥，可在管理页面修改
+
+# 初始化 SQLite 数据库
 def init_db():
     conn = sqlite3.connect('bili_auth.db')
     cursor = conn.cursor()
+
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS accounts (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -42,21 +41,50 @@ def init_db():
     conn.commit()
     conn.close()
     logging.log("DB_INIT_SUCCESS")
+
+# 检查用户是否登录
+def is_logged_in():
+    return 'username' in session
+
 @app.route('/')
 def index():
-    return render_template('index.html')
-    logging.log("INDEX_PAGE_VISITED")
+    if is_logged_in():
+        return redirect(url_for('manage'))
+    return redirect(url_for('login'))
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        if username == 'admin' and password == 'admin':
+            session['username'] = username
+            flash('登录成功！', 'success')
+            return redirect(url_for('manage'))
+        else:
+            flash('用户名或密码错误', 'danger')
+
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    flash('您已成功登出！', 'success')
+    return redirect(url_for('login'))
 
 @app.route('/manage', methods=['GET', 'POST'])
 def manage():
+    if not is_logged_in():
+        return redirect(url_for('login'))
+
     try:
         conn = sqlite3.connect('bili_auth.db')
         cursor = conn.cursor()
         if request.method == 'POST':
-            # 更新会话密钥
             new_secret_key = request.form.get('session_key')
-            app.secret_key = new_secret_key  # 修改应用的secret_key
-
+            app.secret_key = new_secret_key  # 修改应用的 secret_key
+            
             return redirect(url_for('manage'))
 
         cursor.execute('SELECT * FROM accounts')
@@ -66,8 +94,9 @@ def manage():
         conn.close()
         return render_template('manage.html', accounts=accounts, oauth_configs=oauth_configs)
     except Exception as e:
-        print(e)
-        return e
+        logging.log(f"ERROR: {e}")
+        return "发生错误"
+
 @app.route('/add-account', methods=['POST'])
 def add_account():
     data = request.form
@@ -101,7 +130,6 @@ def add_oauth_config():
     authorization_url = data.get('authorization_url')
     token_url = data.get('token_url')
 
-    # 自动生成 client_id 和 client_secret
     client_id = str(uuid.uuid4())
     client_secret = str(uuid.uuid4())
 
@@ -122,7 +150,6 @@ def delete_oauth_config(id):
     conn.commit()
     conn.close()
     return redirect(url_for('manage'))
-
 @app.route('/login-oauth/<int:config_id>')  # 确保 config_id 是整数
 def login_oauth(config_id):
     # 获取 OAuth2 配置
@@ -307,10 +334,10 @@ def qr_code_login():
             #记录cookie到文件
             sender_uid = cookie['DedeUserID']
             csrf = cookie['bili_jct']
-            dev_id = str(uuid.uuid4())
+            dev_id = str(uuid.uuid4()).upper()
             conn = sqlite3.connect('bili_auth.db')
             cursor = conn.cursor()
-            cursor.execute('INSERT INTO accounts (sender_uid, cookies, device_id, csrf) VALUES (?, ?, ?, ?)',(sender_uid, str(cookie), dev_id, csrf))
+            cursor.execute('INSERT INTO accounts (sender_uid, cookies, device_id, csrf) VALUES (?, ?, ?, ?)',(str(sender_uid), str(cookie), dev_id, csrf))
             conn.commit()
             conn.close()
             return "<p>登录成功！</p>"

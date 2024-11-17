@@ -4,31 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bili-Auth 管理页面</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/MiSans-Medium.woff2" as="font" type="font/woff2" crossorigin="anonymous">
     <style>
+        @font-face {
+            font-family: 'MiSans';
+            src: url('/static/MiSans-Medium.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #F3F4F6;
+            font-family: 'MiSans', Tahoma, Geneva, Verdana, sans-serif; /* 替换为新字体 */
+            background-color: #F3F4F6; /* 浅色模式背景 */
+            color: #333; /* 浅色模式文字颜色 */
             margin: 0;
             padding: 0;
+            transition: background-color 0.3s, color 0.3s; /* 动画效果 */
+        }
+
+        body.dark-mode {
+            background-color: #2D2D2D; /* 深色模式背景 */
+            color: #FFFFFF; /* 深色模式文字颜色 */
         }
 
         .container {
-            width: 600px;
+            width: 90%; /* 使用百分比宽度 */
+            max-width: 600px; /* 最大宽度 */
             margin: 50px auto;
-            background: #FFFFFF;
+            background: #FFFFFF; /* 浅色模式容器背景 */
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            transition: background-color 0.3s; /* 动画效果 */
+        }
+
+        body.dark-mode .container {
+            background: #424242; /* 深色模式容器背景 */
         }
 
         h1, h2 {
-            color: #333;
+            color: inherit; /* 继承文字颜色 */
             margin: 20px 0;
-        }
-
-        h1 {
-            text-align: center;
         }
 
         table {
@@ -43,54 +59,110 @@
             text-align: left;
         }
 
-        th {
-            background-color: #0078d4;
-            color: white;
+        /* 媒体查询 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px; /* 减少内边距 */
+            }
+
+            h1, h2 {
+                font-size: 1.5em; /* 调整标题字号 */
+            }
+
+            th, td {
+                padding: 10px; /* 减少表格单元格内边距 */
+            }
         }
 
         button {
-            background-color: #0078D4;  /* Windows 11 按钮色 */
+            background-color: #0078D4; 
             color: white;
             padding: 10px 15px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             transition: background-color 0.3s;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);  /* 阴影效果 */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        button.logout {
+            background-color: #FF0000;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         button:hover {
-            background-color: #005a9e;  /* 悬停时按钮颜色 */
+            background-color: #005A9E;
         }
 
-        input[type="text"] {
+        button.logout:hover {
+            background-color: #B22222;
+        }
+
+        input[type="text"], select {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  /* 输入框阴影 */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s, background-color 0.3s, color 0.3s; /* 动画效果 */
         }
 
-        select {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  /* 下拉框阴影 */
+        /* 浅色模式 */
+        input[type="text"]::placeholder {
+            color: #999; /* 浅色模式占位符颜色 */
         }
 
-        /* 布局调整 */
-        form {
-            margin-bottom: 20px;  /* 表单间距 */
+        /* 深色模式样式 */
+        body.dark-mode input[type="text"], body.dark-mode select {
+            border-color: #555; /* 深色模式边框颜色 */
+            background-color: #6b6b6b; /* 深色模式背景颜色 */
+            color: #fff; /* 深色模式文字颜色 */
+        }
+
+        body.dark-mode input[type="text"]::placeholder {
+            color: #ccc; /* 深色模式占位符颜色 */
+        }
+
+        /* 深色模式下拉框样式 */
+        #theme-select {
+            width: auto; /* 小一点 */
+            padding: 5px; /* 调整内边距 */
+            border: none; /* 无边框 */
+            background: none; /* 无背景 */
+            color: inherit; /* 继承文字颜色 */
+            cursor: pointer; /* 鼠标指针样式 */
+            outline: none; /* 去掉聚焦样式 */
+            margin-bottom: 20px; /* 下边距 */
+            position: absolute; /* 绝对定位 */
+            top: 20px; /* 距顶部20像素 */
+            left: 20px; /* 距左边20像素 */
+        }
+
+        /* 深色模式下拉框选项颜色 */
+        body.dark-mode #theme-select option {
+            background-color: #424242; /* 深色模式下拉框背景颜色 */
+            color: #ffffff; /* 深色模式下拉框选项文字颜色 */
         }
     </style>
 </head>
 <body>
+    <select id="theme-select">
+        <option value="light">浅色模式</option>
+        <option value="dark">深色模式</option>
+    </select>
+
     <div class="container">
         <h1>Bili-Auth 管理页面</h1>
-
+        <h2>用户设置</h2>
+            <a href="/logout">
+                <button class="logout">登出</button>
+            </a>
         <h2>修改会话密钥</h2>
         <form method="POST" action="/manage">
             <input type="text" name="session_key" placeholder="新的会话密钥" required>
@@ -105,11 +177,12 @@
             <input type="text" name="csrf" placeholder="CSRF令牌" required>
             <button type="submit">添加账号</button>
         </form>
+
         <h2>添加机器人账号(模式2)(开发中)</h2>
         <a href="/get-qr-code">
             <button>获取二维码</button>
         </a>
-        <button type="button" onclick="addAccount()">添加账号</button>
+
         <h2>测试机器人账号</h2>
         <form method="POST" action="/test-account">
             <select name="account_id" required>
@@ -195,5 +268,18 @@
             </tbody>
         </table>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#theme-select').change(function() {
+                if ($(this).val() === 'dark') {
+                    $('body').addClass('dark-mode');
+                } else {
+                    $('body').removeClass('dark-mode');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
