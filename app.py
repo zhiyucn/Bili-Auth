@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, redirect, url_for, session, flash
+from flask import Flask, request, jsonify, render_template, redirect, url_for, session, flash,send_from_directory, Response
 import sqlite3
 import requests
 import auth
@@ -9,6 +9,7 @@ import time
 import qrcode
 import json
 import os
+import uuid
 from io import BytesIO
 from flask import send_file
 logging = log.Log(time.strftime("%Y-%m-%d", time.localtime())+".log")
@@ -206,11 +207,6 @@ def send_code():
         device_id = selected_account[3]    # 设备ID
         csrf = selected_account[4]         # CSRF
 
-        # 发送验证码
-        vetify_code = str(random.randint(100000, 999999))
-        content = f"[Bili-Auth]您的验证码为：{vetify_code}，请在10分钟内输入。"
-        print(content)
-
         # 调用发验证码的方法
         auth.Auth.send_code(sender_uid, target_uid, cookies, device_id, csrf)
 
@@ -250,24 +246,89 @@ def test_account():
             return redirect(url_for('manage'))  # 返回成功的页面或消息
 
     return redirect(url_for('manage'))  # 处理未选择的情况
-
+qr_code_url = ""
+qr_code_key = ""
 @app.route('/get-qr-code')
 def get_qr_code():
-    get = requests.get('https://passport.bilibili.com/x/passport-login/web/qrcode/generate')
-    code_url = get.json()['data']['url']
-    qr = qrcode.QRCode(
-        version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_L,
-        box_size=10,
-        border=4,
-    )
-    qr.add_data(code_url)
-    qr.make(fit=True)
-    img = qr.make_image(fill_color="black", back_color="white")
-    img_io = BytesIO()
-    img.save(img_io, 'PNG')
-    img_io.seek(0)
-    return send_file(img_io, mimetype='image/png')
+    global qr_code_url, qr_code_key
+    headers = {
+        'User-Agent':"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0",
+        'Accept_Language':"zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+        'Connection':"keep-alive",
+        'Referer':"https://passport.bilibili.com/login"
+    }
+    get = requests.get('https://passport.bilibili.com/x/passport-login/web/qrcode/generate',headers=headers)
+    logging.log(get.text)
+    if "<!DOCTYPE html>" in get.text:
+        logging.log("ERROR_CODE: 10001")
+    try:
+        code = json.loads(get.text)
+        qr_code_url = code['data']['url']
+        qr_code_key = code['data']['qrcode_key']
+        logging.log(qr_code_url)
+        logging.log(qr_code_key)
+        img = qrcode.make(qr_code_url)
+        os.remove('static/qrcode.png')
+        #这里先删除了之前的qrcode.png文件
+        img.save('static/qrcode.png')
+        return redirect("/qrcode.html")
+    except:
+        logging.log("QR_CODE_ERROR",'ERROR')
+        return "QR_CODE_ERROR"
+    #qr_code_url = code['url']
+@app.route('/qrcode.png')
+def qrcode_png():
+    # qrcode.png文件在static文件夹下
+    return send_from_directory('static', 'qrcode.png')
+
+@app.route('/qrcode.html')
+def qrcode_html():
+    # 返回一个包含HTML内容的Response对象
+    html_content = "<img src='/qrcode.png' alt='QR Code'><br><br><a href='/qr-code-login'>扫码完毕之后点击</a>"
+    return Response(html_content, mimetype='text/html')
+@app.route('/qr-code-login')
+def qr_code_login():
+    global cookie
+    headers = {
+        'User-Agent':"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0",
+        'Accept_Language':"zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+        'Connection':"keep-alive",
+        'Referer':"https://passport.bilibili.com/login"
+    }
+    get = requests.get('https://passport.bilibili.com/x/passport-login/web/qrcode/poll?qrcode_key='+qr_code_key,headers=headers)
+    qr_code_code = json.loads(get.text)
+    qr_code_code = qr_code_code['data']["message"]
+    logging.log(get.text)
+    if "" == qr_code_code:
+        logging.log("QR_CODE_LOGIN_SUCCESS")
+        cookie = requests.utils.dict_from_cookiejar(get.cookies)
+        with open('cookie.txt', 'w') as f:
+            f.write(str(cookie))
+            #记录cookie到文件
+            sender_uid = cookie['DedeUserID']
+            csrf = cookie['bili_jct']
+            dev_id = str(uuid.uuid4())
+            conn = sqlite3.connect('bili_auth.db')
+            cursor = conn.cursor()
+            cursor.execute('INSERT INTO accounts (sender_uid, cookies, device_id, csrf) VALUES (?, ?, ?, ?)',(sender_uid, str(cookie), dev_id, csrf))
+            conn.commit()
+            conn.close()
+            return "<p>登录成功！</p>"
+
+        return "<p>登录成功！</p>"
+    elif "二维码已失效" == qr_code_code:
+        logging.log("QR_CODE_FAILED")
+        return "<p>登录失败！二维码失效，请重新获取！</p>"
+    elif "二维码已扫码未确认" == qr_code_code:
+        logging.log("QR_CODE_WAIT")
+        return "<p>登录失败！二维码已扫描，未确认！</p>"
+    elif "未扫码" == qr_code_code:
+        logging.log("QR_CODE_DONT_LOGIN")
+        return "<p>登录失败！未扫描二维码！</p>"
+    else:
+        logging.log("QR_CODE_ERROR",'ERROR')
+        return "QR_CODE_ERROR"
+        
 if __name__ == '__main__':
     init_db()
     app.run(port=8000)

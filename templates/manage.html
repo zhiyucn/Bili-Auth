@@ -106,7 +106,9 @@
             <button type="submit">添加账号</button>
         </form>
         <h2>添加机器人账号(模式2)(开发中)</h2>
-        <form id="addAccountForm2" method="GET" action="/get-qr-code"></form>
+        <a href="/get-qr-code">
+            <button>获取二维码</button>
+        </a>
         <button type="button" onclick="addAccount()">添加账号</button>
         <h2>测试机器人账号</h2>
         <form method="POST" action="/test-account">
@@ -137,7 +139,7 @@
                 <tr>
                     <td>{{ account[0] }}</td>
                     <td>{{ account[1] }}</td>
-                    <td>{{ account[2] }}</td>
+                    <td>Cookie不显示</td>
                     <td>{{ account[3] }}</td>
                     <td>{{ account[4] }}</td>
                     <td>

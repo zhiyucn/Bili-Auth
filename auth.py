@@ -37,6 +37,7 @@ class Auth:
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36",
             "Cookie": cookies
         }
+        print(headers)
         response = requests.post(url, headers=headers, data=data)
         print(response.text)
         print("状态码:", response.status_code)
@@ -50,10 +51,11 @@ class Auth:
         else:
             logging.log("UNKNOWN_ERROR", "ERROR")
 
-    def test_code(code):
-        if len(code) == 6 and code == verify_code:
-            logging.log("TRUE")
+
+    def verify_test(verify_code):
+        if len(verify_code) == 6 and verify_code == verify_code:
+            logging.log("AUTH:TRUE")
             return True
         else:
-            logging.log("FALSE")
+            logging.log("AUTH:FALSE")
             return False
