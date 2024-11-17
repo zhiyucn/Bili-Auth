@@ -12,7 +12,7 @@ import os
 
 logging = log.Log(time.strftime("%Y-%m-%d", time.localtime()) + ".log")
 app = Flask(__name__)
-app.secret_key = 'dhw82h80H8dwiopusb2udqwef3123'  # 初始密钥，可在管理页面修改
+app.secret_key = 'your_secret_key'  # 初始密钥，可在管理页面修改
 
 # 初始化 SQLite 数据库
 def init_db():
