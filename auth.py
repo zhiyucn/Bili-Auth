@@ -53,6 +53,7 @@ class Auth:
 
 
     def verify_test(verify_code):
+
         if len(verify_code) == 6 and verify_code == verify_code:
             logging.log("AUTH:TRUE")
             return True
