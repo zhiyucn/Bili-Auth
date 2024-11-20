@@ -1,0 +1,58 @@
+[INFO]LOG SYSYTEM STARTED
+[INFO] AUTH RUNNING
+[INFO] DB_INIT_SUCCESS
+[INFO] {"code":0,"message":"0","ttl":1,"data":{"url":"https://account.bilibili.com/h5/account-h5/auth/scan-web?navhide=1\u0026callback=close\u0026qrcode_key=166a15a2ad2d0cd6553698172f5428d9\u0026from=","qrcode_key":"166a15a2ad2d0cd6553698172f5428d9"}}
+[INFO] https://account.bilibili.com/h5/account-h5/auth/scan-web?navhide=1&callback=close&qrcode_key=166a15a2ad2d0cd6553698172f5428d9&from=
+[INFO] 166a15a2ad2d0cd6553698172f5428d9
+[ERROR] QR_CODE_ERROR
+[INFO] {"code":0,"message":"0","ttl":1,"data":{"url":"https://account.bilibili.com/h5/account-h5/auth/scan-web?navhide=1\u0026callback=close\u0026qrcode_key=b32d50bae8dbf2f01c10ea8f28f02bdd\u0026from=","qrcode_key":"b32d50bae8dbf2f01c10ea8f28f02bdd"}}
+[INFO] https://account.bilibili.com/h5/account-h5/auth/scan-web?navhide=1&callback=close&qrcode_key=b32d50bae8dbf2f01c10ea8f28f02bdd&from=
+[INFO] b32d50bae8dbf2f01c10ea8f28f02bdd
+[ERROR] QR_CODE_ERROR
+[INFO] AUTH RUNNING
+[INFO] DB_INIT_SUCCESS
+[INFO] {"code":0,"message":"0","ttl":1,"data":{"url":"https://account.bilibili.com/h5/account-h5/auth/scan-web?navhide=1\u0026callback=close\u0026qrcode_key=3dd09ac187f0d10e45ae46a12ca476c7\u0026from=","qrcode_key":"3dd09ac187f0d10e45ae46a12ca476c7"}}
+[INFO] https://account.bilibili.com/h5/account-h5/auth/scan-web?navhide=1&callback=close&qrcode_key=3dd09ac187f0d10e45ae46a12ca476c7&from=
+[INFO] 3dd09ac187f0d10e45ae46a12ca476c7
+[INFO] AUTH RUNNING
+[INFO] DB_INIT_SUCCESS
+[INFO] {"code":0,"message":"0","ttl":1,"data":{"url":"https://account.bilibili.com/h5/account-h5/auth/scan-web?navhide=1\u0026callback=close\u0026qrcode_key=bf93aa0fb808d5e135b457021ba5d6b4\u0026from=","qrcode_key":"bf93aa0fb808d5e135b457021ba5d6b4"}}
+[INFO] https://account.bilibili.com/h5/account-h5/auth/scan-web?navhide=1&callback=close&qrcode_key=bf93aa0fb808d5e135b457021ba5d6b4&from=
+[INFO] bf93aa0fb808d5e135b457021ba5d6b4
+[ERROR] QR_CODE_ERRORNo module named 'PIL'
+[INFO] AUTH RUNNING
+[INFO] DB_INIT_SUCCESS
+[INFO] {"code":0,"message":"0","ttl":1,"data":{"url":"https://account.bilibili.com/h5/account-h5/auth/scan-web?navhide=1\u0026callback=close\u0026qrcode_key=2cafd3a103a6fb10b1fb40f8e76d4442\u0026from=","qrcode_key":"2cafd3a103a6fb10b1fb40f8e76d4442"}}
+[INFO] https://account.bilibili.com/h5/account-h5/auth/scan-web?navhide=1&callback=close&qrcode_key=2cafd3a103a6fb10b1fb40f8e76d4442&from=
+[INFO] 2cafd3a103a6fb10b1fb40f8e76d4442
+[ERROR] QR_CODE_ERRORNo module named 'PIL'
+[INFO] AUTH RUNNING
+[INFO] DB_INIT_SUCCESS
+[INFO] {"code":0,"message":"0","ttl":1,"data":{"url":"https://account.bilibili.com/h5/account-h5/auth/scan-web?navhide=1\u0026callback=close\u0026qrcode_key=718fd06bc9a988fbc9b2f19b3f14ab18\u0026from=","qrcode_key":"718fd06bc9a988fbc9b2f19b3f14ab18"}}
+[INFO] https://account.bilibili.com/h5/account-h5/auth/scan-web?navhide=1&callback=close&qrcode_key=718fd06bc9a988fbc9b2f19b3f14ab18&from=
+[INFO] 718fd06bc9a988fbc9b2f19b3f14ab18
+[ERROR] QR_CODE_ERROR:No module named 'PIL'
+[INFO] {"code":0,"message":"0","ttl":1,"data":{"url":"https://account.bilibili.com/h5/account-h5/auth/scan-web?navhide=1\u0026callback=close\u0026qrcode_key=e188fdcf4fce8650b9dd86e878dc5999\u0026from=","qrcode_key":"e188fdcf4fce8650b9dd86e878dc5999"}}
+[INFO] https://account.bilibili.com/h5/account-h5/auth/scan-web?navhide=1&callback=close&qrcode_key=e188fdcf4fce8650b9dd86e878dc5999&from=
+[INFO] e188fdcf4fce8650b9dd86e878dc5999
+[ERROR] QR_CODE_ERROR:No module named 'PIL'
+[INFO] AUTH RUNNING
+[INFO] DB_INIT_SUCCESS
+[INFO] {"code":0,"message":"0","ttl":1,"data":{"url":"https://account.bilibili.com/h5/account-h5/auth/scan-web?navhide=1\u0026callback=close\u0026qrcode_key=f2f43e208c867a0d011c321fbaa75846\u0026from=","qrcode_key":"f2f43e208c867a0d011c321fbaa75846"}}
+[INFO] https://account.bilibili.com/h5/account-h5/auth/scan-web?navhide=1&callback=close&qrcode_key=f2f43e208c867a0d011c321fbaa75846&from=
+[INFO] f2f43e208c867a0d011c321fbaa75846
+[INFO] {"code":0,"message":"0","ttl":1,"data":{"url":"","refresh_token":"","timestamp":0,"code":86101,"message":"Î´É¨Âë"}}
+[INFO] QR_CODE_DONT_LOGIN
+[INFO] {"code":0,"message":"0","ttl":1,"data":{"url":"","refresh_token":"","timestamp":0,"code":86101,"message":"Î´É¨Âë"}}
+[INFO] QR_CODE_DONT_LOGIN
+[INFO] AUTH RUNNING
+[INFO] DB_INIT_SUCCESS
+[INFO] {"code":0,"message":"0","ttl":1,"data":{"url":"https://account.bilibili.com/h5/account-h5/auth/scan-web?navhide=1\u0026callback=close\u0026qrcode_key=ee7455db6af062aed67548d741bdcff4\u0026from=","qrcode_key":"ee7455db6af062aed67548d741bdcff4"}}
+[INFO] https://account.bilibili.com/h5/account-h5/auth/scan-web?navhide=1&callback=close&qrcode_key=ee7455db6af062aed67548d741bdcff4&from=
+[INFO] ee7455db6af062aed67548d741bdcff4
+[INFO] {"code":0,"message":"0","ttl":1,"data":{"url":"","refresh_token":"","timestamp":0,"code":86101,"message":"Î´É¨Âë"}}
+[INFO] QR_CODE_DONT_LOGIN
+[INFO] {"code":0,"message":"0","ttl":1,"data":{"url":"","refresh_token":"","timestamp":0,"code":86101,"message":"Î´É¨Âë"}}
+[INFO] QR_CODE_DONT_LOGIN
+[INFO] {"code":0,"message":"0","ttl":1,"data":{"url":"","refresh_token":"","timestamp":0,"code":86101,"message":"Î´É¨Âë"}}
+[INFO] QR_CODE_DONT_LOGIN

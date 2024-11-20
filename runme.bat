@@ -1,1 +1,1 @@
-pip install flask requests qrcode
+pip install flask requests qrcode pillow -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple some-package

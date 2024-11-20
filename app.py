@@ -299,9 +299,9 @@ def get_qr_code():
         #这里先删除了之前的qrcode.png文件
         img.save('static/qrcode.png')
         return redirect("/qrcode.html")
-    except:
-        logging.log("QR_CODE_ERROR",'ERROR')
-        return "QR_CODE_ERROR"
+    except Exception as e:
+        logging.log("QR_CODE_ERROR:"+str(e),'ERROR')
+        return str(e)
     #qr_code_url = code['url']
 @app.route('/qrcode.png')
 def qrcode_png():
@@ -312,7 +312,7 @@ def qrcode_png():
 def qrcode_html():
     # 返回一个包含HTML内容的Response对象
     html_content = "<img src='/qrcode.png' alt='QR Code'><br><br><a href='/qr-code-login'>扫码完毕之后点击</a>"
-    return Response(html_content, mimetype='text/html')
+    return render_template("qrcode.html")
 @app.route('/qr-code-login')
 def qr_code_login():
     global cookie
